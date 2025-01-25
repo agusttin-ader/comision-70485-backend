@@ -3,7 +3,7 @@ import path from 'path';
 
 class ProductManager {
     constructor(filePath) {
-        this.filePath = path.resolve(filePath); // Update the path to the correct location
+        this.filePath = path.resolve(filePath); 
     }
 
     async getAllProducts() {
