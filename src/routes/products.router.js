@@ -1,17 +1,29 @@
 import express from 'express';
 import ProductManager from '../managers/ProductManager.js';
+import path from 'path';
 
 const router = express.Router();
-const productManager = new ProductManager('products.json');
+const productManager = new ProductManager(path.resolve('src/data/products.json')); // Update the path to the correct location
 
 router.get('/', async (req, res) => {
-    const products = await productManager.getAllProducts();
-    res.json(products);
+    try {
+        const products = await productManager.getAllProducts();
+        res.json(products);
+    } catch (error) {
+        res.status(500).json({ error: 'Error getting products' });
+    }
 });
 
 router.get('/:pid', async (req, res) => {
-    const product = await productManager.getProductById(req.params.pid);
-    res.json(product);
+    try {
+        const product = await productManager.getProductById(req.params.pid);
+        if (!product) {
+            return res.status(404).json({ error: 'Product not found' });
+        }
+        res.json(product);
+    } catch (error) {
+        res.status(500).json({ error: 'Error getting product by ID' });
+    }
 });
 
 router.post('/', async (req, res) => {
