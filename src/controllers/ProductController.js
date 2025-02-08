@@ -1,7 +1,7 @@
 import ProductManager from '../managers/ProductManager.js';
 import path from 'path';
 
-const productManager = new ProductManager(path.resolve('src/data/products.json')); // Update the path to the correct location
+const productManager = new ProductManager(path.resolve('src/data/products.json')); // Actualizar la ruta a la ubicación correcta
 
 export const getAllProducts = async (req, res) => {
     try {
