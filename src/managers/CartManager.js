@@ -38,6 +38,55 @@ class CartManager {
         await fs.writeFile(this.filePath, JSON.stringify(carts, null, 2));
         return cart;
     }
+
+    async removeProductFromCart(cartId, productId) {
+        const carts = await this.getAllCarts();
+        const cart = carts.find(cart => cart.id === cartId);
+        if (!cart) return null;
+
+        cart.products = cart.products.filter(product => product.product !== productId);
+
+        await fs.writeFile(this.filePath, JSON.stringify(carts, null, 2));
+        return cart;
+    }
+
+    async updateCartProducts(cartId, products) {
+        const carts = await this.getAllCarts();
+        const cart = carts.find(cart => cart.id === cartId);
+        if (!cart) return null;
+
+        cart.products = products;
+
+        await fs.writeFile(this.filePath, JSON.stringify(carts, null, 2));
+        return cart;
+    }
+
+    async updateProductQuantity(cartId, productId, quantity) {
+        const carts = await this.getAllCarts();
+        const cart = carts.find(cart => cart.id === cartId);
+        if (!cart) return null;
+
+        const productIndex = cart.products.findIndex(product => product.product === productId);
+        if (productIndex === -1) {
+            cart.products.push({ product: productId, quantity });
+        } else {
+            cart.products[productIndex].quantity = quantity;
+        }
+
+        await fs.writeFile(this.filePath, JSON.stringify(carts, null, 2));
+        return cart;
+    }
+
+    async clearCart(cartId) {
+        const carts = await this.getAllCarts();
+        const cart = carts.find(cart => cart.id === cartId);
+        if (!cart) return null;
+
+        cart.products = [];
+
+        await fs.writeFile(this.filePath, JSON.stringify(carts, null, 2));
+        return cart;
+    }
 }
 
 export default CartManager;
